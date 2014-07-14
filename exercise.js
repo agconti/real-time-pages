@@ -21,7 +21,7 @@ ResourceEvents.prototype =  {
         },
         hideAllTags: function(tag){
             var elements = document.getElementsByTagName(tag);
-            for(var i=0; i<elements.length; i++){
+            for(var i=0, elementLength=elements.length; i<elementLength; i++){
                 this.hide(elements[i]);
             }
         },
@@ -44,28 +44,28 @@ Service.prototype = {
         return parent.appendChild(toAppend);
     },
     buildListItem: function(data, property, cssClass){
-        var dataToNode = this.dataToNode;
-        var listItem = document.createElement('li');
-        var header = document.createElement('header');
-
-        var visitorCount = dataToNode('h1', header, data[property].stats.people);
+        var dataToNode = this.dataToNode
+            listItem = document.createElement('li')
+            header = document.createElement('header')
+            visitorCount = dataToNode('h1', header, data[property].stats.people)
+            pageTitle = dataToNode('h1', header, data[property].title);
+            
         visitorCount.className = app.cssClasses.visitorCount;
-        var pageTitle = dataToNode('h1', header, data[property].title);
         listItem.appendChild(header);
         listItem.className = cssClass;
         return listItem;
     },
     buildAside: function(data, property){
         // get top referrers for each list item
-        var toprefs = data[property].stats.toprefs;
-        var dataToNode = this.dataToNode;
-        var aside = document.createElement('aside');
-        var header = document.createElement('header');
-        var ul = document.createElement('ul');
+        var toprefs = data[property].stats.toprefs
+            dataToNode = this.dataToNode
+            aside = document.createElement('aside')
+            header = document.createElement('header')
+            ul = document.createElement('ul');
 
-        for(var _i=0; _i<toprefs.length; _i++){
-            var referers = document.createElement('li');
-            var visitorCount = dataToNode('span', referers, toprefs[_i].visitors);
+        for(var _i=0, toprefsLength=toprefs.length; _i<toprefsLength; _i++){
+            var referers = document.createElement('li'), 
+                visitorCount = dataToNode('span', referers, toprefs[_i].visitors);
             visitorCount.className = app.cssClasses.visitorCount;
             dataToNode('span', referers, toprefs[_i].domain);
             ul.appendChild(referers);
@@ -77,8 +77,8 @@ Service.prototype = {
         return aside;
     },
     addOne: function(data, property, cssClass, self){
-        var aside = this.buildAside(data, property);
-        var listItem = this.buildListItem(data, property, cssClass);
+        var aside = this.buildAside(data, property),
+            listItem = this.buildListItem(data, property, cssClass);
         listItem.addEventListener('click', function(el){
             var aside = this.getElementsByTagName("aside")[0];
             self.events.showOneHideOthers(aside);
@@ -99,8 +99,8 @@ Service.prototype = {
     },
     success: function(req, cssClass, self) {
         if (req.status >= 200 && req.status < 400){
-            var data = JSON.parse(req.responseText);
-            var el = this.addAll(data.pages, cssClass, self);
+            var data = JSON.parse(req.responseText),
+                el = this.addAll(data.pages, cssClass, self);
             return el;
 
         } else {
@@ -112,16 +112,19 @@ Service.prototype = {
         alert("Error");
     },
     updateDOM: function(target, el){
-        var pageElements = document.getElementById(target).getElementsByTagName('*');
-        var inMemoryElements = el.getElementsByTagName('*');
+        var pageElements = document.getElementById(target).getElementsByTagName('*'),
+            inMemoryElements = el.getElementsByTagName('*');
+            inMemoryElementsLength = inMemoryElements.length;
 
-        for (var i =0; i<pageElements.length; i++) {
-            if (i >= inMemoryElements.length){
-                pageElements[i].parentNode.removeChild(pageElements[i]);
+        for (var i=0, pageElementslength=pageElements.length; i<pageElementslength; i++) {
+            var pageElement = pageElements[i],
+                inMemoryElement = inMemoryElements[i];
+            if (i >= inMemoryElementsLength){
+                pageElement.parentNode.removeChild(pageElement);
             }
-            else if (pageElements[i].firstChild.nextSibling === null){
-                if (pageElements[i].innerHTML !== inMemoryElements[i].innerHTML){
-                    pageElements[i].innerHTML = inMemoryElements[i].innerHTML;
+            else if (pageElement.firstChild.nextSibling === null){
+                if (pageElement.innerHTML !== inMemoryElement.innerHTML){
+                    pageElement.innerHTML = inMemoryElement.innerHTML;
                 }
             }
         }
