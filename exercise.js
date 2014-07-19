@@ -44,12 +44,12 @@ Service.prototype = {
         return parent.appendChild(toAppend);
     },
     buildListItem: function(data, property, cssClass){
-        var dataToNode = this.dataToNode
-            listItem = document.createElement('li')
-            header = document.createElement('header')
-            visitorCount = dataToNode('h1', header, data[property].stats.people)
+        var dataToNode = this.dataToNode,
+            listItem = document.createElement('li'),
+            header = document.createElement('header'),
+            visitorCount = dataToNode('h1', header, data[property].stats.people),
             pageTitle = dataToNode('h1', header, data[property].title);
-            
+
         visitorCount.className = app.cssClasses.visitorCount;
         listItem.appendChild(header);
         listItem.className = cssClass;
@@ -57,14 +57,14 @@ Service.prototype = {
     },
     buildAside: function(data, property){
         // get top referrers for each list item
-        var toprefs = data[property].stats.toprefs
-            dataToNode = this.dataToNode
-            aside = document.createElement('aside')
-            header = document.createElement('header')
+        var toprefs = data[property].stats.toprefs,
+            dataToNode = this.dataToNode,
+            aside = document.createElement('aside'),
+            header = document.createElement('header'),
             ul = document.createElement('ul');
 
         for(var _i=0, toprefsLength=toprefs.length; _i<toprefsLength; _i++){
-            var referers = document.createElement('li'), 
+            var referers = document.createElement('li'),
                 visitorCount = dataToNode('span', referers, toprefs[_i].visitors);
             visitorCount.className = app.cssClasses.visitorCount;
             dataToNode('span', referers, toprefs[_i].domain);
@@ -88,7 +88,6 @@ Service.prototype = {
     },
     addAll: function(data, cssClass, self){
         var el = document.createElement('ul');
-
         for(var property in data){
             el.appendChild(this.addOne(data, property, cssClass, self));
         }
@@ -113,7 +112,7 @@ Service.prototype = {
     },
     updateDOM: function(target, el){
         var pageElements = document.getElementById(target).getElementsByTagName('*'),
-            inMemoryElements = el.getElementsByTagName('*');
+            inMemoryElements = el.getElementsByTagName('*'),
             inMemoryElementsLength = inMemoryElements.length;
 
         for (var i=0, pageElementslength=pageElements.length; i<pageElementslength; i++) {
@@ -167,9 +166,10 @@ function Resource (options) {
 
 Resource.prototype = {
     constructString: function(obj, concatFunction){
-        var returnString = '';
-        var index = 0;
-        for (var property in obj){
+        var returnString = '',
+            index = 0,
+            property;
+        for (property in obj){
             returnString += concatFunction(obj, property, index);
             index++;
         }
@@ -213,15 +213,15 @@ function App (options) {
 var app = new App({});
 
 app.start = function(target){
-    var resource = new Resource({});
-    var request = resource.service.request;
+    var resource = new Resource({}),
+        request = resource.service.request;
 
     request.onload = function(){
-        var el = resource.service.success(request, app.cssClasses.page, resource);
+        var el = resource.service.success(request, app.cssClasses.page, resource),
+            updateEvent = resource.events.updateEvent();
         el.setAttribute("id", app.javascriptTargets.pageList);
         el.className = app.cssClasses.pageList;
         resource.service.render(target, el);
-        var updateEvent = resource.events.updateEvent();
         document.addEventListener(resource.events.updateEventName, function(){
             resource.service.update(resource);
         }, false);
