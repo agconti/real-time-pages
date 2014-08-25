@@ -35,11 +35,14 @@ body{
    Custom styles
    ========================================================================== */
 .masthead {
-    background: hsl(177, 44%, 50%);
+    background: hsl(204, 45%, 96%);
+    color: hsl(200, 45%, 25%);
     margin: 0;
     padding: 1em;
 }
-
+.masthead h1 { 
+    margin: 0;
+}
 .top-pages{
     margin: 1em;
     position: relative;
@@ -81,10 +84,14 @@ body{
     margin: 1em;
 }
 footer{
-    background: hsl(204, 45%, 96%);
+    background: hsl(200, 40%, 15%);
     color: hsl(200, 45%, 25%);
     margin: 0;
     padding: 1em;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 footer p {
     margin: 0;
